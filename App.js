@@ -1,5 +1,13 @@
 import React from 'react'
+import { View } from 'react-native'
 
-import TextDetectionScreen from './Screens/TextDetectionScreen'
+import TextExtractionScreen from "./Screens/TextExtractionScreen"
 
-const App = () => {}
+export default function App() {
+    return (
+      
+        <TextExtractionScreen />
+        
+    );
+  }
+  
