@@ -3,35 +3,35 @@ import { View,Image, Text, TextInput, StyleSheet, TouchableOpacity } from 'react
 import * as ImagePicker from 'expo-image-picker';
 import { detectTextFromImage } from '../Services/TextDetectionService';
 import { translateText } from '../Services/TranslationService';
+import * as FileSystem from 'expo-file-system';
 
 const TextExtractionScreen = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [image, setImage] = useState(null);
   const [extractedText, setExtractedText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [targetLanguage, setTargetLanguage] = useState('en'); // Default language is English
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to pick an image.');
-      return;
-    }
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
+    console.log(result);
 
-    if (!result.cancelled) {
-      setSelectedFile(result.uri);
+    if (!result.canceled) {
+      const fileUri = result.uri;
+      setImage(fileUri);
+      extractText(fileUri);
     }
   };
 
   const extractText = async () => {
-    if (selectedFile) {
-      const extractedText = await detectTextFromImage(selectedFile);
+    if (image) {
+      const extractedText = await detectTextFromImage(image);
       setExtractedText(extractedText);
     }
   };
@@ -48,12 +48,13 @@ const TextExtractionScreen = () => {
       <TouchableOpacity onPress={pickImage} style={styles.button}>
         <Text>Pick an image</Text>
       </TouchableOpacity>
-      {selectedFile && ( <Image source={{uri:selectedFile}}/>)}
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+
       <TouchableOpacity onPress={extractText}>
         <Text>Extract Text</Text>
       </TouchableOpacity>
 
-      {extractText ? <Text>{extractText}</Text>:null}
+      {extractText ? <Text>{JSON.stringify(extractedText)}</Text>:null}
 
       <TextInput
         placeholder='Enter target Language'
