@@ -53,11 +53,11 @@ npm start
 
 1. Launch the app on your device.
 
-2. Press the "Capture" button to take a picture using the camera or select an image from your phone's gallery.
+2. Press the "Pick image" button to select an image from your phone's gallery.
 
 3. Once the image is selected, press the "Extract Text" button to detect text regions within the image.
 
-4. After text detection, press the "Translate" button to convert the extracted text to your preferred language.
+4. After text detection, press the "Translate text" button to convert the extracted text to your preferred language.
 
 ## Contributions
 
